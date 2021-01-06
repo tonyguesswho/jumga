@@ -1,7 +1,7 @@
 from django.urls import path
 from api.views.user import RegisterView, CustomAuthToken, Profileview
 from api.views.seller import SellerView, SellerDetailView, \
-    SellerPaymentView, PaymentConfirmView
+    SellerPaymentView, PaymentConfirmView, StoreListView
 from api.views.product import ProductView, ProductDetail
 
 
@@ -43,6 +43,7 @@ urlpatterns = [
     path('login/', CustomAuthToken.as_view(), name='login'),
     path('me/', Profileview.as_view(), name='profile'),
     path('seller/', SellerView.as_view(), name='create_seller'),
+    path('stores/', StoreListView.as_view(), name='list_stores'),
     path('seller/payment/', SellerPaymentView.as_view(), name='seller-payment'),
     path('seller/<slug:seller_id>/',
          SellerDetailView.as_view(), name='seller-detail'),

@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.utils import IntegrityError
-from rest_framework.generics import (RetrieveUpdateAPIView,)
+from rest_framework.generics import (RetrieveUpdateAPIView, ListAPIView)
 from api.utils.permissions import IsOwner
 from api.serializers.seller import SellerSerializer
 from apps.seller.models import Seller
@@ -46,6 +46,11 @@ class SellerDetailView(RetrieveUpdateAPIView):
     permission_classes = (IsOwner,)
     lookup_field = 'url'
     lookup_url_kwarg = 'seller_id'
+
+
+class StoreListView(ListAPIView):
+    queryset = Seller.objects.all()
+    serializer_class = SellerSerializer
 
 
 class SellerPaymentView(APIView):
