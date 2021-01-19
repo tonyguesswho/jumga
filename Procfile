@@ -1,1 +1,1 @@
-web: gunicorn app.jumga_project.wsgi
+web: gunicorn .app.jumga_project.wsgi
