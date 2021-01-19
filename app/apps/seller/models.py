@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import validate_unicode_slug
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-
+from apps.delivery.models import Rider
 
 import uuid
 
@@ -12,6 +12,9 @@ User = get_user_model()
 class Seller(models.Model):
     user = models.OneToOneField(
         User, related_name='seller', on_delete=models.CASCADE)
+
+    rider = models.OneToOneField(
+        Rider, related_name='rider', on_delete=models.CASCADE, null=True)
     name = models.CharField(_('Store name'), max_length=255)
     description = models.TextField(blank=True)
 

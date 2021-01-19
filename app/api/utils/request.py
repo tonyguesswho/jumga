@@ -48,6 +48,7 @@ class Request(object):
             raise Exception(str(e))
 
         response = json.loads(self.res.content)
+        print(response, "RETURNED RESPONSEE")
         if not 200 <= self.res.status_code < 300:
             raise Exception
         else:
@@ -80,4 +81,42 @@ class RavePayment(Request):
             response = super(RavePayment, self).send()
         except Exception as e:
             raise Exception(str(e))
+        return response
+
+
+class Banks(Request):
+    def __init__(self):
+        url = os.getenv("FLUTTERWAVE_API_URL")
+        super(Banks, self).__init__(base=url)
+
+    def get_banks(self, country='NG'):
+        self.method = 'get'
+        self.api = f'banks/{country}'
+        self.headers['Authorization'] = f'Bearer {os.getenv("FLUTTERWAVE_SECRET_KEY")}'
+        response = dict()
+        try:
+            response = super(Banks, self).send()
+        except Exception as e:
+            raise Exception(str(e))
+        return response
+
+
+class SubAccount(Request):
+    def __init__(self):
+        url = os.getenv("FLUTTERWAVE_API_URL")
+        super(SubAccount, self).__init__(base=url)
+
+    # seller get 97.5% of selling price
+    # rider gets 80% of delivery
+
+    def create(self, payload):
+        self.method = 'post'
+        self.api = 'subaccounts'
+        self.headers['Authorization'] = f'Bearer {os.getenv("FLUTTERWAVE_SECRET_KEY")}'
+        self.data = payload
+        response = dict()
+        try:
+            response = super(SubAccount, self).send()
+        except Exception:
+            raise Exception
         return response

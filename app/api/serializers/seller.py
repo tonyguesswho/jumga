@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from apps.seller.models import Seller
+from api.serializers.delivery import RiderSerilaizer
 
 
 class SellerSerializer(serializers.ModelSerializer):
+
+    rider = RiderSerilaizer(many=False, required=False)
 
     def validate_url(self, value):
         """
@@ -22,5 +25,5 @@ class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
         fields = ['id', 'name', 'description', 'is_active',
-                  'url', 'uuid', 'user',  'created_at', 'updated_at']
+                  'url', 'uuid', 'user',  'created_at', 'updated_at', 'rider']
         read_only_fields = ["user"]

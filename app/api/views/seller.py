@@ -10,9 +10,16 @@ from api.utils.permissions import IsOwner
 from api.serializers.seller import SellerSerializer
 from apps.seller.models import Seller
 from api.utils.request import RavePayment
+from faker import Faker
+from django.db import transaction
+from apps.delivery.models import Rider
+from apps.user.models import Account
+import random
 
 import uuid
 import os
+
+faker = Faker()
 
 
 class SellerView(APIView):
@@ -73,7 +80,6 @@ class SellerPaymentView(APIView):
             "currency": settings.JUMGA_DEFAULT_CURRENCY,
             "tx_ref": reference,
             "redirect_url": os.getenv("REDIRECT_URL", '/seller/payment-confirm'),
-            # "payment_options": os.getenv('PAYMENT_OPTIONS'),  # put in env
             "meta": {
                 "user_id": user.id,
                 "store_name": user.seller.name,
@@ -103,6 +109,7 @@ class PaymentConfirmView(APIView):
     """
     permission_classes = (IsAuthenticated,)
 
+    @transaction.atomic
     def get(self, request, *args, **kwargs):
         """
         Verify payment using transaction id
@@ -117,10 +124,18 @@ class PaymentConfirmView(APIView):
                         (result.get('currency') != settings.JUMGA_DEFAULT_CURRENCY):
                     return Response({'message': 'Wrong amount or currency'},
                                     status=status.HTTP_400_BAD_REQUEST)
+
+                # assign a rider
+                riders = list(Rider.objects.all())
+                rider = random.choice(riders)
+                seller.rider = rider
+
+                # Activate seller
                 seller.is_active = True
                 seller.save()
+
                 return Response({'message': 'Payment verified', "details": res}, status=status.HTTP_200_OK)
             else:
                 return Response({'message': 'Payment not verified', "details": res}, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
-            return Response({'message': 'An error occurred', "details": res}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'message': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

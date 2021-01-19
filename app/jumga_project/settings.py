@@ -25,8 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-JUMGA_DEFAULT_CURRENCY = 'GHS'
+JUMGA_DEFAULT_CURRENCY = 'USD'
+JUMGA_COMM = os.getenv("JUMGA_COMM", 0.25)
+JUMGA_COMM_SHIPPING = os.getenv("JUMGA_COMM_SHIPPING", 0.20)
 SELLER_REG_AMOUNT = os.getenv("SELLER_REG_AMOUNT", '20')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,6 +51,8 @@ INSTALLED_APPS = [
     'apps.user',
     'apps.seller',
     'apps.product',
+    'apps.delivery',
+    "apps.order",
     'drf_yasg'
 ]
 
