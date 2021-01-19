@@ -36,7 +36,8 @@ SELLER_REG_AMOUNT = os.getenv("SELLER_REG_AMOUNT", '20')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,https://jumga-tony.herokuapp.com/").split(",")
 
 
 # Application definition
