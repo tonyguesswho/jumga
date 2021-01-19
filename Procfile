@@ -1,1 +1,1 @@
-web: gunicorn .app.jumga_project.wsgi
+web: gunicorn --pythonpath app jumga_project.wsgi
