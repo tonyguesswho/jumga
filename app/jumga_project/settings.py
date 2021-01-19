@@ -162,7 +162,10 @@ REST_FRAMEWORK = {
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'https://awesome-brahmagupta-4bc69b.netlify.app/',
+    "http://localhost:8080",
+]
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())

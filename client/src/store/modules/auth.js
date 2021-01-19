@@ -14,7 +14,7 @@ const getters = {
 const actions = {
   async Register({dispatch}, form) {
 	  console.log(form)
-    await axios.post('register', form)
+    await axios.post('register/', form)
     let UserForm = new FormData()
 	UserForm.append('email', form.email)
 	UserForm.append('first_name', form.first_name)
@@ -24,7 +24,7 @@ const actions = {
   },
 
   async LogIn({commit}, user) {
-    await axios.post("login", user);
+    await axios.post("login/", user);
     await commit("setUser", user.get("username"));
   },
 
