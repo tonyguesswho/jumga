@@ -7,23 +7,32 @@
           <form @submit.prevent="submit">
             <c-form-control>
               <c-form-label for="email">Email address</c-form-label>
-              <c-input type="email" id="email" v-model="form.email" />
+              <c-input type="email" id="email" v-model="email" />
             </c-form-control>
             <c-form-control>
               <c-form-label for="first_name">First Name</c-form-label>
-              <c-input type="text" id="first_name" v-model="form.first_name" />
+              <c-input type="text" id="first_name" v-model="first_name" />
             </c-form-control>
             <c-form-control>
               <c-form-label for="last_name">Last Name</c-form-label>
-              <c-input type="text" id="last_name" v-model="form.last_name" />
+              <c-input type="text" id="last_name" v-model="last_name" />
             </c-form-control>
             <c-form-control>
               <c-form-label for="password">Password</c-form-label>
-              <c-input type="password" id="password" v-model="form.password" />
+              <c-input type="password" id="password" v-model="password" />
             </c-form-control>
-            <c-button variant-color="blue" size="md" type="submit">Submit</c-button>
+            <c-button
+              my="5"
+              variant-color="blue"
+              size="md"
+              type="submit"
+              @click="registerUser"
+              :disabled="loading"
+            >
+              <p v-if="loading">Loading</p>
+              {{ loading ? "" : "Signup" }}
+            </c-button>
           </form>
-          <p v-if="showError" id="error">Username already exists</p>
         </c-box>
       </c-box>
     </c-box>
@@ -31,35 +40,57 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import Axios from "axios";
 export default {
-  name: "Register",
-  components: {},
+  beforeRouteEnter(to, from, next) {
+    if (localStorage.getItem("user")) {
+      return next({ path: "/" });
+    }
+    next();
+  },
   data() {
     return {
-      form: {
-        email: "",
-        first_name: "",
-        last_name: "",
-        password: ""
-      },
-      showError: false
+      first_name: "",
+      last_name: "",
+      email: "",
+      password: "",
+      errors: {},
+      submitted: false,
+      loading: false
     };
   },
   methods: {
-    ...mapActions(["Register"]),
-    async submit() {
+    async registerUser() {
       try {
-        await this.Register(this.form);
-        this.$router.push("/seller");
-        this.showError = false;
+        this.loading = true;
+        const { data } = await Axios.post(
+          `${process.env.VUE_APP_API_URL}/register/`,
+          {
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+            password: this.password
+          }
+        );
+        if ((data.status = 201)) {
+          localStorage.setItem("user", JSON.stringify(data));
+          this.$root.user = data;
+          this.submitted = true;
+          // this.authenticateUser();
+          this.loading = false;
+          this.$noty.success("Successful Registration");
+          this.$router.push("/seller");
+        }
       } catch (error) {
-        this.showError = true;
+        this.loading = false;
+        // this.errors = error.response.data.errors;
+        this.$noty.error("Oops Something went wrong");
       }
     }
   }
 };
 </script>
+
 
 <style>
 </style>

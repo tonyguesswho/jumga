@@ -4,18 +4,31 @@
       <c-box textAlign="center">
         <c-heading as="h2">Become a seller</c-heading>
         <c-box my="{4}" textAlign="left">
-          <form @submit.prevent="submit">
+          <form @submit.prevent="submit"></form>
             <c-form-control>
-              <c-form-label for="url">Store Url</c-form-label>
-              <c-input type="text" id="url" v-model="form.url" />
+              <c-form-label for="url">Url</c-form-label>
+              <c-input type="text" id="url" v-model="url" />
             </c-form-control>
             <c-form-control>
-              <c-form-label for="name">Display name</c-form-label>
-              <c-input type="text" id="name" v-model="form.name" />
+              <c-form-label for="name"> Name</c-form-label>
+              <c-input type="text" id="name" v-model="name" />
             </c-form-control>
-            <c-button my="2" variant-color="blue" size="md" type="submit">Submit</c-button>
+            <c-form-control>
+              <c-form-label for="description">Description</c-form-label>
+              <c-input type="description" id="description" v-model="description" />
+            </c-form-control>
+            <c-button
+			  my="5"
+              variant-color="blue"
+              size="md"
+              type="submit"
+              @click="CreateSeller"
+              :disabled="loading"
+            >
+              <p v-if="loading">Loading</p>
+              {{ loading ? "" : "Submit" }}
+            </c-button>
           </form>
-          <p v-if="showError" id="error">Username or Password is incorrect</p>
         </c-box>
       </c-box>
     </c-box>
@@ -23,34 +36,60 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import Axios from "axios";
 export default {
-  name: "Seller",
-  components: {},
+beforeRouteEnter(to, from, next) {
+	if (localStorage.getItem("seller")) {
+      return next({ path: "/dashboard" });
+    }
+    if (localStorage.getItem("user")) {
+      return next();
+	} 
+    return next({ path: "/login" });
+
+  },
   data() {
     return {
-      form: {
-        url: "",
-        name: ""
-      }
+      url: "",
+      name: "",
+      description: "",
+      password: "",
+      errors: {},
+      submitted: false,
+      loading: false
     };
   },
-  //   created: function() {
-  //     // a function to call getposts action
-  //     this.GetPosts();
-  //   },
-  computed: {
-    ...mapGetters({ User: "StateUser" })
-  },
   methods: {
-    ...mapActions(["CreateSeeller"]),
-    async submit() {
+    async CreateSeller() {
       try {
-        await this.CreateSeller(this.form);
+		this.loading = true;
+		
+        const { data } = await Axios.post(
+          `${process.env.VUE_APP_API_URL}/seller/`,
+          {
+            name: this.name,
+            url: this.url,
+            description: this.description
+		  },
+		  { headers: { Authorization: `Token ${this.$root.user.token}` } }
+        );
+        if ((data.status = 201)) {
+          localStorage.setItem("seller", JSON.stringify(data));
+          this.$root.seller = data;
+          this.submitted = true;
+          this.loading = false;
+          this.$noty.success("Seller Registration Successful");
+          this.$router.push("/dashboard");
+        }
       } catch (error) {
-        throw "error occured";
+        this.loading = false;
+        this.$noty.error("Oops Something went wrong");
       }
     }
   }
 };
 </script>
+
+
+<style>
+</style>

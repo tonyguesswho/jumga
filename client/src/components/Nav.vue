@@ -6,40 +6,40 @@
       </router-link>
     </c-flex>
     <c-flex>
-      <router-link to="/login">
+      <router-link to="/login" v-if="!isAuth">
         <c-button marginRight="10" variant="outline" color="gray.700" size="sm">login</c-button>
       </router-link>
-      <router-link to="/register">
+      <router-link to="/register" v-if="!isAuth">
         <c-button variant="outline" color="gray.700" size="sm">Register</c-button>
+      </router-link>
+      <router-link to="/dashboard" v-if="isAuth">
+        <c-button marginRight="10" variant="outline" color="gray.700" size="sm">Dashboard</c-button>
       </router-link>
 
       <!-- <c-text paddingRight="10">Menu 3</c-text> -->
       <!-- <c-text>Menu 4</c-text> -->
     </c-flex>
     <c-flex>
-      <c-button
-        v-if="isLoggedIn"
-        @click="logout"
-        variant="outline"
-        color="gray.700"
-        size="sm"
-      >Logout</c-button>
+      <c-button variant="outline" color="gray.700" size="sm" v-if="isAuth" @click="logout">Logout</c-button>
     </c-flex>
   </c-flex>
 </template>
 
 <script>
 export default {
-  name: "NavBar",
   computed: {
-    isLoggedIn: function() {
-      return this.$store.getters.isAuthenticated;
+    isAuth() {
+      return this.$root.user;
     }
   },
   methods: {
-    async logout() {
-      await this.$store.dispatch("LogOut");
-      this.$router.push("/login");
+    logout() {
+      localStorage.removeItem("user");
+      localStorage.removeItem("seller");
+      this.$root.user = {};
+      this.$root.seller = {};
+      this.$noty.success("Successful Logged Out");
+      this.$router.push("/");
     }
   }
 };
