@@ -8,10 +8,24 @@
             <c-form-control is-required>
               <c-form-label for="url">Url</c-form-label>
               <c-input type="text" id="url" v-model="url" isRequired />
+			  <c-form-helper-text id="email-helper-text">
+    			one word e.g mystore
+  				</c-form-helper-text>
             </c-form-control>
             <c-form-control is-required>
               <c-form-label for="name"> Name</c-form-label>
               <c-input type="text" id="name" v-model="name" isRequired />
+            </c-form-control>
+			<c-form-control is-required>
+              <c-form-label for="mobile">Country</c-form-label>
+              <c-box mb="3" w="300px">
+                <c-select v-model="country_code" placeholder="Select Country">
+                  <option value="NG">Nigeriar</option>
+                  <option value="KE">Kenya</option>
+				  <option value="GH">Ghana</option>
+                  <option value="UK">United Kingdom</option>
+                </c-select>
+              </c-box>
             </c-form-control>
             <c-form-control>
               <c-form-label for="description">Description</c-form-label>
@@ -51,7 +65,8 @@ beforeRouteEnter(to, from, next) {
   data() {
     return {
       url: "",
-      name: "",
+	  name: "",
+	  country_code:"",
       description: "",
       password: "",
       errors: {},
@@ -69,7 +84,8 @@ beforeRouteEnter(to, from, next) {
           {
             name: this.name,
             url: this.url,
-            description: this.description
+			description: this.description,
+			country_code:this.country_code
 		  },
 		  { headers: { Authorization: `Token ${this.$root.user.token}` } }
         );

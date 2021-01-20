@@ -9,6 +9,7 @@ import Dashboard from '../views/Dashboard'
 import Verify from '../views/Verify'
 import AddProduct from '../views/AddProduct'
 import AddAccount from '../views/AddAccount'
+import Store from '../views/Store'
 
 Vue.use(VueRouter);
 
@@ -59,6 +60,11 @@ const routes = [
     name: AddAccount,
     component: AddAccount,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/store/*',
+    name: Store,
+    component: Store,
   }
 ]
 

@@ -17,9 +17,7 @@
               <c-form-label for="mobile">Bank</c-form-label>
               <c-box mb="3" w="300px">
                 <c-select v-model="bank_code" placeholder="Select Bank">
-                  <option value="grilled">Grilled Backyard Burger</option>
-                  <option value="pub-style">The Pub-Style Burger</option>
-                  <option value="jucy-lucy">The Jucy Lucy</option>
+                  <option :value="bank.code" v-for="bank in banks" :key="bank.code">{{bank.name}}</option>    
                 </c-select>
               </c-box>
             </c-form-control>
@@ -60,6 +58,7 @@ export default {
       country_code: "",
       bank_code: "",
       errors: {},
+      banks:[],
       submitted: false,
       loading: false
     };
@@ -74,7 +73,7 @@ export default {
             account_number: this.account_number,
             mobile: this.mobile,
             bank_code: this.bank_code,
-            country_code: this.country_code
+            country_code: this.$root.seller.country_code
           },
           { headers: { Authorization: `Token ${this.$root.user.token}` } }
         );
@@ -89,17 +88,18 @@ export default {
         this.$noty.error("Oops Something went wrong");
       }
     },
-     async get_banks() {
+    async getBanks() {
       try {
-        this.loading = true;
         const { data } = await Axios.get(
-          `${process.env.VUE_APP_API_URL}/bank/`,
+          `${process.env.VUE_APP_API_URL}/getbanks/${this.$root.seller.country_code}/`,
+          {
+            headers: { Authorization: `Token ${this.$root.user.token}` }
+          }
         );
-        if ((data.status = 201)) {
-          this.submitted = true;
+        if ((data.status = 200)) {
+
           this.loading = false;
-          this.$router.push("/dashboard");
-          this.$noty.success("Account added");
+          this.banks = data.data
         }
       } catch (error) {
         this.loading = false;

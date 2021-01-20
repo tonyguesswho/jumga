@@ -32,6 +32,8 @@ Due to want of timee heere are some assumptions I made
 - $100 as default delivery charge
 - Only sellers can access the dashboard
 - As sellers enter the dashboard the present button indicates the next line of action
+- I have used the access test banks from "0690000030" to "0690000045" 
+- Flutterwave API key is set to Test
 
 Disclaimer - The frontend was super rushed hopefully I get chanced to rebuild after this challenge
 
