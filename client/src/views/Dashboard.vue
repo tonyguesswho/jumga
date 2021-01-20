@@ -132,7 +132,7 @@ export default {
     async getProducts() {
       try {
         const { data } = await Axios.get(
-          `${process.env.VUE_APP_API_URL}/product/`,
+          `${process.env.VUE_APP_API_URL}/product/?${this.$root.seller.url}`,
           {
             headers: { Authorization: `Token ${this.$root.user.token}` }
           }

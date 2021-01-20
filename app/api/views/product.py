@@ -12,7 +12,8 @@ class ProductView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # user = self.request.user
-        store = self.request.GET.get("store", None)
+        store = self.request.query_params.get('store', None)
+        print(store, "Store url")
         seller = Seller.objects.get(url=store)
         queryset = Product.objects.filter(seller=seller)
         return queryset
