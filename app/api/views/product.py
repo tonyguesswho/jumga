@@ -32,7 +32,7 @@ class ProductView(APIView):
         """
         """
         try:
-            store = request.query_params.get('store')
+            store = kwargs.get('store', None)
             seller = Seller.objects.get(url=store)
             products = Product.objects.filter(seller=seller)
             return Response(ProductSerilaizer(products, many=True).data, status=status.HTTP_200_OK)
