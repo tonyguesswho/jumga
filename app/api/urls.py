@@ -24,10 +24,10 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
-product_list = ProductView.as_view({
-    'get': 'list',
-    'post': 'create'
-})
+# product_list = ProductView.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
 cart_list = CartView.as_view({
     'get': 'list',
     'post': 'create'
@@ -70,7 +70,7 @@ urlpatterns = [
          name='add_account'),
     path('product/<slug:store>/', ProductView.as_view(), name='get_product'),
     path('product/<int:pk>/', product_detail),
-    path('cart/add/', ProductCartView.as_view(), name='add-product'),
+    path('cart/add/', ProductCartView.as_view(), name='add-products'),
     path('cart/', cart_list),
     path('cart/<int:pk>/', cart_detail),
     path('docs/', schema_view.with_ui('swagger',
