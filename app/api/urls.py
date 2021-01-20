@@ -68,7 +68,7 @@ urlpatterns = [
     path('account/',
          AccountsView.as_view(),
          name='add_account'),
-    path('product', product_list),
+    path('product/<slug:store>/', ProductView.as_view(), name='get_product'),
     path('product/<int:pk>/', product_detail),
     path('cart/add/', ProductCartView.as_view(), name='add-product'),
     path('cart/', cart_list),
