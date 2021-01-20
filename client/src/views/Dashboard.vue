@@ -132,7 +132,7 @@ export default {
     async getProducts() {
       try {
         const { data } = await Axios.get(
-          `${process.env.VUE_APP_API_URL}/product/?${this.$root.seller.url}`,
+          `${process.env.VUE_APP_API_URL}/product/${this.$root.seller.url}/`,
           {
             headers: { Authorization: `Token ${this.$root.user.token}` }
           }
@@ -141,7 +141,6 @@ export default {
           this.loading = false;
           this.products = data;
           this.isProducts = true;
-          console.log(this.products);
         }
       } catch (error) {
         this.loading = false;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <c-heading width="100" textAlign="center" bg="green.50" my="5">Seller's Dashboard</c-heading>
+    <c-heading width="100" textAlign="center" bg="green.50" my="5">Store</c-heading>
     <c-box v-if="!loading">
       <c-text>Store name: {{seller.name}}</c-text>
       <c-text>Store url: {{seller.url}}</c-text>
@@ -55,46 +55,24 @@ export default {
     return next({ path: "/seller" });
   },
   mounted() {
-    this.settings();
-    this.getUser();
-    this.getaccount();
-    this.getProducts();
+	  this.$route.params.pathMatch
+    // this.settings();
+    // this.getUser();
+    // this.getaccount();
+    // this.getProducts();
   },
   data() {
     return {
       active: false,
-      seller: {},
-      account: null,
-      loading: false,
+      store: {},
+	  loading: false,
+	  storeUrl:'',
       products: [],
       isProducts: false
     };
   },
   methods: {
-    settings() {
-      (this.active = this.$root.seller.is_active),
-        (this.seller = this.$root.seller);
-    },
-    async pay() {
-      try {
-        this.loading = true;
-        const { data } = await Axios.post(
-          `${process.env.VUE_APP_API_URL}/seller/payment/`,
-          {},
-          { headers: { Authorization: `Token ${this.$root.user.token}` } }
-        );
-        if ((data.status = 200)) {
-          this.submitted = true;
-          this.loading = false;
-          window.location.href = data["data"]["link"];
-          this.$noty.success("Redirecting");
-        }
-      } catch (error) {
-        this.loading = false;
-        this.$noty.error("Oops Something went wrong");
-      }
-    },
-    async getUser() {
+    async getStore() {
       try {
         const { data } = await Axios.get(`${process.env.VUE_APP_API_URL}/me/`, {
           headers: { Authorization: `Token ${this.$root.user.token}` }
@@ -108,25 +86,6 @@ export default {
       } catch (error) {
         this.loading = false;
         this.$noty.error("Oops Something went wrong");
-      }
-    },
-    async getaccount() {
-      try {
-        const { data } = await Axios.get(
-          `${process.env.VUE_APP_API_URL}/account/${this.$root.user.user_id}`,
-          {
-            headers: { Authorization: `Token ${this.$root.user.token}` }
-          }
-        );
-        if ((data.status = 200)) {
-          if (data) {
-            localStorage.setItem("account", JSON.stringify(data));
-            this.$root.account = data;
-            this.account = this.$root.account;
-          }
-        }
-      } catch (error) {
-        this.loading = false;
       }
     },
     async getProducts() {

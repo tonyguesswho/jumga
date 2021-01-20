@@ -50,7 +50,7 @@ class SellerView(APIView):
 class SellerDetailView(RetrieveUpdateAPIView):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
-    permission_classes = (IsOwner,)
+    # permission_classes = (IsOwner,)
     lookup_field = 'url'
     lookup_url_kwarg = 'seller_id'
 

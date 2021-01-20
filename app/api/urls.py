@@ -40,9 +40,9 @@ cart_detail = CartView.as_view({
     'patch': 'partial_update',
     'delete': 'destroy'
 })
-product_detail = ProductView.as_view({
-    'get': 'retrieve'
-})
+# product_detail = ProductView.as_view({
+#     'get': 'retrieve'
+# })
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
@@ -69,7 +69,7 @@ urlpatterns = [
          AccountsView.as_view(),
          name='add_account'),
     path('product/<slug:store>/', ProductView.as_view(), name='get_product'),
-    path('product/<int:pk>/', product_detail),
+    # path('product/<int:pk>/', product_detail),
     path('cart/add/', ProductCartView.as_view(), name='add-products'),
     path('cart/', cart_list),
     path('cart/<int:pk>/', cart_detail),
