@@ -24,10 +24,16 @@ The **fJungas-app** is an application that allows the users to becamoes online s
 
 Things to Note
 Due to want of timee heere are some assumptions I made
-- Sellers can createe only one store
+- Sellers can create only one store
 - Each store will be assigned a rider
 - Riders have been preepoulated form a riders.json filee in app/apps/deliver/fixtures/riders.json
-- Already createed subaccounts for riders
+- Already created subaccounts for riders
+- Used USD as currency all through
+- $100 as default delivery charge
+- Only sellers can access the dashboard
+- As sellers enter the dashboard the present button indicates the next line of action
+
+Disclaimer - The frontend was super rushed hopefully I get chanced to rebuild after this challenge
 
 
 - BackEnd

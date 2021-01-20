@@ -6,6 +6,9 @@ import Register from '../views/Register'
 import Login from '../views/Login'
 import Seller from '../views/Seller'
 import Dashboard from '../views/Dashboard'
+import Verify from '../views/Verify'
+import AddProduct from '../views/AddProduct'
+import AddAccount from '../views/AddAccount'
 
 Vue.use(VueRouter);
 
@@ -37,6 +40,24 @@ const routes = [
     path: '/dashboard',
     name: Dashboard,
     component: Dashboard,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/sellerpayment',
+    name: Verify,
+    component: Verify,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/addproduct',
+    name: AddProduct,
+    component: AddProduct,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/addaccount',
+    name: AddAccount,
+    component: AddAccount,
     meta: { requiresAuth: true },
   }
 ]

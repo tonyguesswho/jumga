@@ -36,8 +36,8 @@ export default {
     logout() {
       localStorage.removeItem("user");
       localStorage.removeItem("seller");
-      this.$root.user = {};
-      this.$root.seller = {};
+      this.$root.user = null;
+      this.$root.seller = null;
       this.$noty.success("Successful Logged Out");
       this.$router.push("/");
     }

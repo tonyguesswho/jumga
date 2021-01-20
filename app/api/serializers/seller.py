@@ -25,5 +25,5 @@ class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
         fields = ['id', 'name', 'description', 'is_active',
-                  'url', 'uuid', 'user',  'created_at', 'updated_at', 'rider']
+                  'url', 'uuid', 'user',  'created_at', 'updated_at', 'rider', 'country_code']
         read_only_fields = ["user"]

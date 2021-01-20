@@ -31,12 +31,13 @@ Vue.use(Chakra)
 Vue.config.productionTip = false;
 const userData = localStorage.getItem("user");
 const sellerData = localStorage.getItem("seller");
+const saccountData = localStorage.getItem("account");
 
 
 new Vue({
   router,
   data: {
-    user: userData ? JSON.parse(userData) : {},
+    user: userData ? JSON.parse(userData) : null,
     seller: sellerData ? JSON.parse(sellerData) : null
   },
   el: '#app',

@@ -5,13 +5,13 @@
         <c-heading as="h2">Become a seller</c-heading>
         <c-box my="{4}" textAlign="left">
           <form @submit.prevent="submit"></form>
-            <c-form-control>
+            <c-form-control is-required>
               <c-form-label for="url">Url</c-form-label>
-              <c-input type="text" id="url" v-model="url" />
+              <c-input type="text" id="url" v-model="url" isRequired />
             </c-form-control>
-            <c-form-control>
+            <c-form-control is-required>
               <c-form-label for="name"> Name</c-form-label>
-              <c-input type="text" id="name" v-model="name" />
+              <c-input type="text" id="name" v-model="name" isRequired />
             </c-form-control>
             <c-form-control>
               <c-form-label for="description">Description</c-form-label>
