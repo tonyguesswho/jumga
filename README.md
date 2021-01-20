@@ -40,3 +40,7 @@ Here is the [ API DOCS ](https://jumga-tony.herokuapp.com/api/docs/) of the appl
 The FrontEnd is a VueJs application located in the client folder deployed on netlify.
 
 Here is the [ LIVE FRONTEND URL](https://awesome-brahmagupta-4bc69b.netlify.app/) of the application
+
+
+Features not completely present on the frontend
+
