@@ -7,8 +7,10 @@ import Login from '../views/Login'
 import Seller from '../views/Seller'
 import Dashboard from '../views/Dashboard'
 import Verify from '../views/Verify'
+import OrderVerify from '../views/OrderVerify'
 import AddProduct from '../views/AddProduct'
 import AddAccount from '../views/AddAccount'
+import Order from '../views/Order'
 import Store from '../views/Store'
 
 Vue.use(VueRouter);
@@ -50,6 +52,12 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/orderpayment',
+    name: OrderVerify,
+    component: OrderVerify,
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/addproduct',
     name: AddProduct,
     component: AddProduct,
@@ -60,6 +68,11 @@ const routes = [
     name: AddAccount,
     component: AddAccount,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/order',
+    name: Order,
+    component: Order,
   },
   {
     path: '/store/*',

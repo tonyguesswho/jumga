@@ -21,14 +21,15 @@ export default {
         const {
           data
         } = await Axios.get(
-		  `${process.env.VUE_APP_API_URL}/seller/confirm-payment/${this.$route.query.transaction_id}/${this.$route.query.tx_ref}/`,
-          { headers: { Authorization: `Token ${this.$root.user.token}` } }
+		  `${process.env.VUE_APP_API_URL}/order-payment/${this.$route.query.transaction_id}/${this.$route.query.tx_ref}/`,
         );
         if ((data.status = 200)) {
           this.submitted = true;
           this.loading = false;
-          this.$router.push("/dashboard");
-          this.$noty.success("Payment Confirmed");
+		  this.$noty.success("Payment Confirmed");
+		  localStorage.removeItem('cart')
+		  localStorage.removeItem('cart_id')
+		  this.$router.push(`/store/${JSON.parse(localStorage.getItem("seller")).url}`);
         }
       } catch (error) {
         this.loading = false;

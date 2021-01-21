@@ -5,11 +5,11 @@
         <c-heading as="h2">Add Product</c-heading>
         <c-box my="{4}" textAlign="left">
           <form @submit.prevent="submit">
-            <c-form-control>
+            <c-form-control is-required>
               <c-form-label for="title">Product Name</c-form-label>
               <c-input type="title" id="title" v-model="title" />
             </c-form-control>
-            <c-form-control>
+            <c-form-control is-required>
               <c-form-label for="price">Price</c-form-label>
               <c-input type="price" id="price" v-model="price" />
             </c-form-control>

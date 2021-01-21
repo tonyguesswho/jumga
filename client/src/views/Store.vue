@@ -1,87 +1,69 @@
 <template>
   <div>
-    <c-heading width="100" textAlign="center" bg="green.50" my="5">Store</c-heading>
-    <c-box v-if="!loading">
-      <c-text>Store name: {{seller.name}}</c-text>
-      <c-text>Store url: {{seller.url}}</c-text>
-      <c-text>Dispatch Rider name: {{seller['rider'].name}}</c-text>
-      <c-text>Dispatch Rider Email: {{seller['rider'].email}}</c-text>
-    </c-box>
-
-    <router-link to="/store/metal">
-      <c-button v-if="active && account">Go To Store</c-button>
-    </router-link>
-    <c-flex justify="center">
-      <router-link to="/addproduct">
-        <c-button v-if="account">Add Product</c-button>
-      </router-link>
-      <router-link to="/addaccount">
-        <c-button v-if="active && !account">Add Account</c-button>
-      </router-link>
-
-      <c-button v-if="!active" @click="pay">
-        <p v-if="loading">Loading</p>
-        {{ loading ? "" : "Activate Store" }}
-      </c-button>
-    </c-flex>
-    <c-box v-if="isProducts">
-      <c-text fontSize="5xl" textAlign="center" fontWeight="bold">Products</c-text>
-      <c-flex my="12" justify="center">
-        <c-flex
-          v-for="product in products"
-          :key="product.title"
-          flexDirection="column"
-          bg="green.200"
-          mx="4"
-          p="10"
-          w="sm"
-          rounded="lg"
-          align="center"
-        >
-          <c-text mt="6" textAlign="center" color="white" fontSize="xl">{{product.title}}</c-text>
-          <c-text mt="6" textAlign="center" color="white" fontSize="xl">{{product.price}}</c-text>
-        </c-flex>
+    <c-box v-if="active">
+      <c-heading width="100" textAlign="center" bg="green.50" my="5">Store</c-heading>
+      <c-flex justify="space-between">
+        <c-text>Welcome to {{store.name}}</c-text>
+        <c-button @click="goToCart">Go to Cart -- {{cart_count}} product(s) added</c-button>
       </c-flex>
+      <c-box v-if="isProducts">
+        <c-text fontSize="5xl" textAlign="center" fontWeight="bold">Products</c-text>
+        <c-flex my="12" justify="center">
+          <c-flex
+            v-for="product in products"
+            :key="product.title"
+            flexDirection="column"
+            bg="green.200"
+            mx="4"
+            p="10"
+            w="sm"
+            rounded="lg"
+            align="center"
+          >
+            <c-text mt="6" textAlign="center" color="white" fontSize="xl">{{product.title}}</c-text>
+            <c-text mt="6" textAlign="center" color="white" fontSize="xl">{{product.price}}</c-text>
+            <c-button @click="add(product)">{{ cart[product.id] ? "Added to cart" : "Add To Cart" }}</c-button>
+          </c-flex>
+        </c-flex>
+      </c-box>
     </c-box>
+    <c-box v-else textAlign="center">Store Does not exist</c-box>
   </div>
 </template>
 <script>
 import Axios from "axios";
 export default {
-  beforeRouteEnter(to, from, next) {
-    if (localStorage.getItem("seller")) {
-      return next();
-    }
-    return next({ path: "/seller" });
-  },
   mounted() {
-	  this.$route.params.pathMatch
-    // this.settings();
-    // this.getUser();
-    // this.getaccount();
-    // this.getProducts();
+    this.getStore();
+    this.getProducts();
+    this.createCart();
   },
   data() {
     return {
       active: false,
       store: {},
-	  loading: false,
-	  storeUrl:'',
+      loading: false,
+      storeUrl: "",
       products: [],
-      isProducts: false
+      isProducts: false,
+      cart_count: 0,
+      cart: {},
+      cart_id: null
     };
   },
   methods: {
     async getStore() {
       try {
-        const { data } = await Axios.get(`${process.env.VUE_APP_API_URL}/me/`, {
-          headers: { Authorization: `Token ${this.$root.user.token}` }
-        });
-        if ((data.status = 200)) {
-          if (data.seller) {
-            localStorage.setItem("seller", JSON.stringify(data.seller));
-            this.$root.seller = data.seller;
+        const { data } = await Axios.get(
+          `${process.env.VUE_APP_API_URL}/seller/${this.$route.params.pathMatch}/`,
+          {
+            headers: { Authorization: `Token ${this.$root.user.token}` }
           }
+        );
+        if ((data.status = 200)) {
+          this.store = data;
+          this.active = data["is_active"];
+          localStorage.setItem("store", JSON.stringify(data));
         }
       } catch (error) {
         this.loading = false;
@@ -91,7 +73,7 @@ export default {
     async getProducts() {
       try {
         const { data } = await Axios.get(
-          `${process.env.VUE_APP_API_URL}/product/`,
+          `${process.env.VUE_APP_API_URL}/product/${this.$route.params.pathMatch}/`,
           {
             headers: { Authorization: `Token ${this.$root.user.token}` }
           }
@@ -100,12 +82,45 @@ export default {
           this.loading = false;
           this.products = data;
           this.isProducts = true;
-          console.log(this.products);
         }
       } catch (error) {
         this.loading = false;
         this.$noty.error("Oops Something went wrong");
       }
+    },
+    async createCart() {
+      try {
+        const { data } = await Axios.post(
+          `${process.env.VUE_APP_API_URL}/cart/`,
+          {}
+        );
+        if ((data.status = 200)) {
+          this.cart_id = data.id;
+          localStorage.setItem("cart_id", JSON.stringify(this.cart_id));
+        }
+      } catch (error) {
+        this.loading = false;
+        // this.$noty.error("Oops Something went wrong");
+      }
+    },
+    async add(product) {
+      if (this.cart[product.id]) {
+        return;
+      } else {
+        this.cart[product.id] = product;
+        this.cart_count += 1;
+        localStorage.setItem("cart", JSON.stringify(this.cart));
+        const { data } = await Axios.post(
+          `${process.env.VUE_APP_API_URL}/cart/add/`,
+          {
+			  cart_id: this.cart_id,
+			  product_id:product.id
+		  }
+        );
+      }
+    },
+    goToCart() {
+      this.$router.push("/order");
     }
   }
 };
