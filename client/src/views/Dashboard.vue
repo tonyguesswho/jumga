@@ -8,7 +8,7 @@
       <c-text>Dispatch Rider Email: {{seller['rider'].email}}</c-text>
     </c-box>
 
-    <router-link to="/store/metal">
+    <router-link :to="{ path: `store/${seller.url}`}">
       <c-button v-if="active && account">Go To Store</c-button>
     </router-link>
     <c-flex justify="center">
@@ -24,7 +24,7 @@
         {{ loading ? "" : "Activate Store" }}
       </c-button>
     </c-flex>
-    <c-box v-if="isProducts">
+    <c-box v-if="isProducts && account">
       <c-text fontSize="5xl" textAlign="center" fontWeight="bold">Products</c-text>
       <c-flex my="12" justify="center">
         <c-flex

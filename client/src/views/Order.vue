@@ -6,6 +6,7 @@
         <c-flex my="12" justify="center">
           <c-flex v-for="product in cart" :key="product.title">
             <c-text>{{product.title}}------{{product.price}}</c-text>
+            <c-text>Shippong Price = $100</c-text>
           </c-flex>
         </c-flex>
         <form @submit.prevent="submit">

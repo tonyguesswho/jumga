@@ -20,7 +20,9 @@ The **fJungas-app** is an application that allows the users to becamoes online s
 
 2. Sales
     - Users can buy product from stores(no need to login)
+    - stores can be accessed from https://awesome-brahmagupta-4bc69b.netlify.app/store/{{store url}}
     - Orders are fulfilled and amount sent to sellers/jumga and riders
+    - Default shipping is 100usd
 
 Things to Note
 Due to want of timee heere are some assumptions I made

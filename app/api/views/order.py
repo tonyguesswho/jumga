@@ -145,7 +145,6 @@ class OrderConfirmView(APIView):
             res = RavePayment().verify(transaction_id=kwargs.get('transaction_id'))
             result = res['data']
             order_id = result['meta']['order']
-            # seller_id = result['meta']['seller_id']
             order = get_object_or_404(Order, pk=order_id)
             if (result.get('status') == 'successful') and (result.get('tx_ref') == kwargs.get('trx_ref')):
                 if(int(result.get('amount')) < int(order.total_price)) or\

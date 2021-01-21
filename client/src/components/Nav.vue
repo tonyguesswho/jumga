@@ -10,7 +10,7 @@
         <c-button marginRight="10" variant="outline" color="gray.700" size="sm">login</c-button>
       </router-link>
       <router-link to="/register" v-if="!isAuth">
-        <c-button variant="outline" color="gray.700" size="sm">Register</c-button>
+        <c-button variant="outline" color="gray.700" size="sm">Become a seller</c-button>
       </router-link>
       <router-link to="/dashboard" v-if="isAuth">
         <c-button marginRight="10" variant="outline" color="gray.700" size="sm">Dashboard</c-button>
